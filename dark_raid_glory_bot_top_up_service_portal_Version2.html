@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#09090d">
+  <title>Dark Raid Glory — Voucher</title>
+
+  <style>
+    :root {
+      color-scheme: dark;
+      --background: #09090d;
+      --panel: #14141c;
+      --border: #342027;
+      --red: #ff3038;
+      --gold: #f5b942;
+      --muted: #a7a7b3;
+      --green: #42d392;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      padding: 24px;
+      display: grid;
+      place-items: center;
+      color: #f4f4f6;
+      background:
+        radial-gradient(ellipse at top, rgba(139, 0, 0, 0.22), transparent 55%),
+        linear-gradient(rgba(255, 48, 56, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 48, 56, 0.035) 1px, transparent 1px),
+        var(--background);
+      background-size: auto, 36px 36px, 36px 36px, auto;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .card {
+      width: min(100%, 520px);
+      padding: 32px;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      background: rgba(20, 20, 28, 0.96);
+      box-shadow: 0 20px 70px rgba(0, 0, 0, 0.45);
+    }
+
+    .brand {
+      margin: 0 0 8px;
+      color: var(--red);
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(24px, 6vw, 34px);
+      text-align: center;
+    }
+
+    .intro {
+      margin: 12px auto 26px;
+      max-width: 390px;
+      color: var(--muted);
+      line-height: 1.55;
+      text-align: center;
+    }
+
+    .voucher-box {
+      padding: 20px;
+      border: 1px dashed rgba(245, 185, 66, 0.65);
+      border-radius: 14px;
+      background: rgba(0, 0, 0, 0.3);
+      text-align: center;
+    }
+
+    .label {
+      display: block;
+      margin-bottom: 10px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .voucher-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .voucher-code {
+      color: var(--gold);
+      font-size: clamp(17px, 4.5vw, 23px);
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      overflow-wrap: anywhere;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+      cursor: pointer;
+    }
+
+    .copy-button {
+      padding: 10px 14px;
+      border-radius: 9px;
+      color: #17130b;
+      background: var(--gold);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .copy-button:hover {
+      background: #ffd16b;
+    }
+
+    .remaining {
+      margin: 18px 0 0;
+      padding: 14px;
+      border: 1px solid rgba(66, 211, 146, 0.25);
+      border-radius: 12px;
+      background: rgba(66, 211, 146, 0.07);
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .remaining strong {
+      display: block;
+      margin-top: 5px;
+      color: var(--green);
+      font-size: 23px;
+    }
+
+    form {
+      margin-top: 24px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px;
+      border: 1px solid #41414c;
+      border-radius: 10px;
+      outline: none;
+      color: #fff;
+      background: #0b0b10;
+    }
+
+    input:focus {
+      border-color: var(--red);
+      box-shadow: 0 0 0 3px rgba(255, 48, 56, 0.12);
+    }
+
+    .claim-button {
+      width: 100%;
+      margin-top: 14px;
+      padding: 15px;
+      border: 1px solid #ff6a70;
+      border-radius: 10px;
+      color: white;
+      background: linear-gradient(110deg, #ff3038, #a90c16);
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .claim-button:hover:not(:disabled) {
+      filter: brightness(1.15);
+    }
+
+    .claim-button:disabled {
+      cursor: not-allowed;
+      opacity: 0.55;
+    }
+
+    .message {
+      min-height: 22px;
+      margin: 14px 0 0;
+      font-size: 14px;
+      line-height: 1.5;
+      text-align: center;
+    }
+
+    .message.success {
+      color: var(--green);
+    }
+
+    .message.error {
+      color: #ff777d;
+    }
+
+    .notice {
+      margin: 20px 0 0;
+      padding-top: 16px;
+      border-top: 1px solid #30303a;
+      color: #9696a2;
+      font-size: 12px;
+      line-height: 1.55;
+      text-align: center;
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 16px;
+      }
+
+      .card {
+        padding: 24px 18px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="card">
+    <p class="brand">Dark Raid Glory</p>
+    <h1>Voucher Claim</h1>
+    <p class="intro">Copy the voucher code, enter your Player UID, and submit your claim.</p>
+
+    <section class="voucher-box" aria-label="Voucher code">
+      <span class="label">Voucher code</span>
+      <div class="voucher-row">
+        <code class="voucher-code" id="voucher-code">DARKREDGLORY686988</code>
+        <button class="copy-button" id="copy-button" type="button">Copy code</button>
+      </div>
+    </section>
+
+    <section class="remaining" aria-live="polite">
+      Demo slots remaining
+      <strong id="remaining-count">100</strong>
+    </section>
+
+    <form id="claim-form">
+      <label for="player-uid">Player UID</label>
+      <input
+        id="player-uid"
+        name="playerUid"
+        type="text"
+        inputmode="numeric"
+        autocomplete="off"
+        maxlength="15"
+        placeholder="Enter your Player UID"
+        required
+      >
+      <button class="claim-button" id="claim-button" type="submit">Claim voucher</button>
+      <p class="message" id="message" role="status" aria-live="polite"></p>
+    </form>
+
+    <p class="notice">
+      Demo only: claims and the remaining count are saved in this browser and are not shared
+      with other visitors. This page does not connect to Free Fire or provide in-game rewards.
+    </p>
+  </main>
+
+  <script>
+    const VOUCHER_CODE = "DARKREDGLORY686988";
+    const TOTAL_SLOTS = 100;
+    const STORAGE_KEY = "darkRaidGloryDemoClaims";
+
+    const remainingCount = document.getElementById("remaining-count");
+    const claimForm = document.getElementById("claim-form");
+    const playerUidInput = document.getElementById("player-uid");
+    const claimButton = document.getElementById("claim-button");
+    const copyButton = document.getElementById("copy-button");
+    const message = document.getElementById("message");
+
+    function getClaims() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+        return Array.isArray(saved) ? saved : [];
+      } catch {
+        return [];
+      }
+    }
+
+    function updateDisplay() {
+      const remaining = Math.max(0, TOTAL_SLOTS - getClaims().length);
+      remainingCount.textContent = String(remaining);
+      claimButton.disabled = remaining === 0;
+      claimButton.textContent = remaining === 0 ? "No demo slots remaining" : "Claim voucher";
+    }
+
+    function showMessage(text, type) {
+      message.textContent = text;
+      message.className = `message ${type}`;
+    }
+
+    copyButton.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(VOUCHER_CODE);
+        copyButton.textContent = "Copied!";
+      } catch {
+        const temporaryInput = document.createElement("textarea");
+        temporaryInput.value = VOUCHER_CODE;
+        temporaryInput.setAttribute("readonly", "");
+        temporaryInput.style.position = "fixed";
+        temporaryInput.style.opacity = "0";
+        document.body.appendChild(temporaryInput);
+        temporaryInput.select();
+
+        const copied = document.execCommand("copy");
+        temporaryInput.remove();
+        copyButton.textContent = copied ? "Copied!" : "Copy failed";
+      }
+
+      window.setTimeout(() => {
+        copyButton.textContent = "Copy code";
+      }, 1800);
+    });
+
+    claimForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const uid = playerUidInput.value.trim();
+
+      if (!/^[0-9]{5,15}$/.test(uid)) {
+        showMessage("Enter a UID containing 5–15 digits.", "error");
+        return;
+      }
+
+      const claims = getClaims();
+
+      if (claims.includes(uid)) {
+        showMessage("This UID has already claimed in this browser.", "error");
+        return;
+      }
+
+      if (claims.length >= TOTAL_SLOTS) {
+        updateDisplay();
+        showMessage("There are no demo slots remaining.", "error");
+        return;
+      }
+
+      claims.push(uid);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(claims));
+      updateDisplay();
+      claimForm.reset();
+
+      showMessage("Demo claim recorded in this browser.", "success");
+    });
+
+    updateDisplay();
+  </script>
+</body>
+</html>
